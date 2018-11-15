@@ -14,19 +14,22 @@ if(!$product){
 ?>
 <?php
  if(isset($_POST['product'])){
-    $req_fields = array('product-title','product-categorie','product-stock_total','product-stock_loan', 'product-stock_available' );
+//    $req_fields = array('product-title','product-categorie','product-stock_total','product-stock_loan', 'product-stock_available' );
+    $req_fields = array('product-title','product-categorie');
     validate_fields($req_fields);
 
    if(empty($errors)){
        $p_name  = remove_junk($db->escape($_POST['product-title']));
        $p_cat   = (int)$_POST['product-categorie'];
-       $p_stk   = remove_junk($db->escape($_POST['product-stock_total']));
-       $p_stk_loan   = remove_junk($db->escape($_POST['product-stock_loan']));
-       $p_stk_ava  = remove_junk($db->escape($_POST['product-stock_available']));
+       $p_ref   = $_POST['product-ref'];
+//       $p_stk   = remove_junk($db->escape($_POST['product-stock_total']));
+//       $p_stk_loan   = remove_junk($db->escape($_POST['product-stock_loan']));
+//       $p_stk_ava  = remove_junk($db->escape($_POST['product-stock_available']));
 
        $query   = "UPDATE products SET";
-       $query  .=" name ='{$p_name}', stock_total ='{$p_stk}',";
-       $query  .=" stock_loan ='{$p_stk_loan}', stock_available ='{$p_stk_ava}', categorie_id ='{$p_cat}'";
+       $query  .=" name ='{$p_name}', reference ='{$p_ref}',";
+//       $query  .=" stock_loan ='{$p_stk_loan}', stock_available ='{$p_stk_ava}', categorie_id ='{$p_cat}'";
+       $query  .=" categorie_id ='{$p_cat}'";
        $query  .=" WHERE id ='{$product['id']}'";
        $result = $db->query($query);
                if($result && $db->affected_rows() === 1){
@@ -67,8 +70,16 @@ if(!$product){
                   <span class="input-group-addon">
                    <i class="glyphicon glyphicon-th-large"></i>
                   </span>
-                  <input type="text" class="form-control" name="product-title" value="<?php echo remove_junk($product['name']);?>">
-               </div>
+                  <input type="text" class="form-control" name="product-ref" placeholder="Referencia" value="<?php echo remove_junk($product['reference']);?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                   <i class="glyphicon glyphicon-th-large"></i>
+                  </span>
+                  <input type="text" class="form-control" name="product-title" placeholder="Descripcion" value="<?php echo remove_junk($product['name']);?>">
+                </div>
               </div>
               <div class="form-group">
                 <div class="row">
@@ -84,7 +95,7 @@ if(!$product){
                 </div>
               </div>
 
-              <div class="form-group">
+<!--              <div class="form-group">
                <div class="row">
                  <div class="col-md-4">
                   <div class="form-group">
@@ -120,7 +131,7 @@ if(!$product){
                    </div>
                   </div>
                </div>
-              </div>
+              </div>-->
               <button type="submit" name="product" class="btn btn-danger">Actualizar</button>
           </form>
          </div>

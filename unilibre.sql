@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.2
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 07-11-2018 a las 22:15:18
--- Versión del servidor: 10.1.24-MariaDB
--- Versión de PHP: 7.1.6
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 15-11-2018 a las 22:34:37
+-- Versión del servidor: 10.1.30-MariaDB
+-- Versión de PHP: 7.1.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -40,7 +40,31 @@ CREATE TABLE `blocks` (
 INSERT INTO `blocks` (`id`, `name`) VALUES
 (2, 'Bloque A'),
 (3, 'Bloque B'),
-(4, 'Bloque C');
+(4, 'Bloque C'),
+(5, 'BLoque X');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `branch`
+--
+
+CREATE TABLE `branch` (
+  `id` int(11) NOT NULL,
+  `descripcion` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `branch`
+--
+
+INSERT INTO `branch` (`id`, `descripcion`) VALUES
+(1, 'BOGOTA'),
+(2, 'SOCORRO'),
+(3, 'PEREIRA'),
+(4, 'CARTAGENA'),
+(5, 'CUCUTA'),
+(6, 'CALI');
 
 -- --------------------------------------------------------
 
@@ -66,11 +90,79 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `inventory`
+--
+
+CREATE TABLE `inventory` (
+  `id` int(11) NOT NULL,
+  `id_product` int(11) UNSIGNED NOT NULL,
+  `lab_id` int(11) NOT NULL,
+  `stock_quantity` int(11) UNSIGNED NOT NULL,
+  `taken_quantitiy` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `inventory`
+--
+
+INSERT INTO `inventory` (`id`, `id_product`, `lab_id`, `stock_quantity`, `taken_quantitiy`) VALUES
+(1, 7, 1, 2, 0),
+(3, 5, 1, 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `labs`
+--
+
+CREATE TABLE `labs` (
+  `id` int(11) NOT NULL,
+  `description` varchar(150) NOT NULL,
+  `id_block` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `labs`
+--
+
+INSERT INTO `labs` (`id`, `description`, `id_block`) VALUES
+(1, 'Laboratorio principal', 5),
+(2, 'Laboratorio X', 2),
+(3, 'Lab YY', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `loans`
+--
+
+CREATE TABLE `loans` (
+  `id` int(11) NOT NULL,
+  `init_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `finisihed` tinyint(1) NOT NULL DEFAULT '0',
+  `id_sucursal` int(11) NOT NULL,
+  `id_lab` int(11) NOT NULL,
+  `id_producto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `loans`
+--
+
+INSERT INTO `loans` (`id`, `init_date`, `end_date`, `finisihed`, `id_sucursal`, `id_lab`, `id_producto`) VALUES
+(5, '2018-11-14 01:00:00', '2018-11-16 01:00:00', 1, 1, 1, 7),
+(6, '2018-11-14 13:01:00', '2018-11-16 12:59:00', 1, 1, 1, 5);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `products`
 --
 
 CREATE TABLE `products` (
   `id` int(11) UNSIGNED NOT NULL,
+  `reference` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
   `stock_total` int(11) DEFAULT NULL,
   `stock_loan` int(11) DEFAULT NULL,
@@ -83,9 +175,10 @@ CREATE TABLE `products` (
 -- Volcado de datos para la tabla `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `stock_total`, `stock_loan`, `stock_available`, `categorie_id`, `date`) VALUES
-(5, 'prueba3', 10, 0, 10, 2, '2018-10-17 19:35:22'),
-(6, 'pruebaprueba3', 10, 0, 10, 3, '2018-10-17 20:34:57');
+INSERT INTO `products` (`id`, `reference`, `name`, `stock_total`, `stock_loan`, `stock_available`, `categorie_id`, `date`) VALUES
+(5, 'ABC', 'Dron DJI Spark', 10, 0, 10, 2, '2018-10-17 19:35:22'),
+(6, 'DEF', 'Dron GoPro Karma', 10, 0, 10, 3, '2018-10-17 20:34:57'),
+(7, '4578900', 'Barometro E - 500', NULL, NULL, 0, 3, '2018-11-14 11:51:02');
 
 -- --------------------------------------------------------
 
@@ -109,9 +202,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `user_level`, `image`, `status`, `last_login`) VALUES
-(4, 'Jorge', 'jm', '112f489f6b265cdf4e4892f7b952cd36fc0ecd5f', 1, 'libre.jpg', 1, '2018-10-17 21:09:15'),
-(5, 'Test', 'test', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', 2, 'tazmania.jpg', 1, '2018-10-17 20:14:57'),
-(6, 'Usuario', 'usuario', 'b665e217b51994789b02b1838e730d6b93baa30f', 3, 'marvin.png', 1, '2018-10-17 21:08:49');
+(4, 'Jorge', 'jm', '112f489f6b265cdf4e4892f7b952cd36fc0ecd5f', 1, 'libre.jpg', 1, '2018-11-14 11:42:14'),
+(5, 'Test', 'test', '112f489f6b265cdf4e4892f7b952cd36fc0ecd5f', 2, 'tazmania.jpg', 1, '2018-11-07 20:55:54'),
+(6, 'Usuario', 'usuario', '112f489f6b265cdf4e4892f7b952cd36fc0ecd5f', 3, 'marvin.png', 1, '2018-11-07 20:56:04');
 
 -- --------------------------------------------------------
 
@@ -146,6 +239,12 @@ ALTER TABLE `blocks`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `branch`
+--
+ALTER TABLE `branch`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `categories`
 --
 ALTER TABLE `categories`
@@ -153,11 +252,31 @@ ALTER TABLE `categories`
   ADD UNIQUE KEY `name` (`name`);
 
 --
+-- Indices de la tabla `inventory`
+--
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_product` (`id_product`,`lab_id`);
+
+--
+-- Indices de la tabla `labs`
+--
+ALTER TABLE `labs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `loans`
+--
+ALTER TABLE `loans`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
+  ADD UNIQUE KEY `reference` (`reference`),
   ADD KEY `categorie_id` (`categorie_id`);
 
 --
@@ -183,27 +302,56 @@ ALTER TABLE `user_groups`
 -- AUTO_INCREMENT de la tabla `blocks`
 --
 ALTER TABLE `blocks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `branch`
+--
+ALTER TABLE `branch`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `inventory`
+--
+ALTER TABLE `inventory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `labs`
+--
+ALTER TABLE `labs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `loans`
+--
+ALTER TABLE `loans`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `user_groups`
 --
 ALTER TABLE `user_groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- Restricciones para tablas volcadas
 --

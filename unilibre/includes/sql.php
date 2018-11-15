@@ -193,6 +193,20 @@ function tableExists($table){
     return find_by_sql($sql);
 
    }
+   /*--------------------------------------------------------------*/
+   /* Mostrar inventario
+   /*--------------------------------------------------------------*/
+  function join_inventory_table(){
+     global $db;
+     $sql  =" SELECT i.id as inventory_id, c.name as category_name, l.description as lab_description, i.stock_quantity, i.taken_quantitiy, p.name as product_name, p.reference ";
+    $sql  .=" FROM inventory i ";
+    $sql  .=" JOIN products p on p.id = i.id_product ";
+    $sql  .=" JOIN labs l on l.id = i.lab_id ";
+    $sql  .=" JOIN categories c on c.id = p.categorie_id ";
+    $sql  .=" ORDER BY p.id ASC";
+    return find_by_sql($sql);
+
+   }
   /*--------------------------------------------------------------*/
   /* Function for Finding all product name
   /* Request coming from ajax.php for auto suggest

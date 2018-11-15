@@ -19,6 +19,12 @@
       <span>Bloques</span>
     </a>
   </li>
+  <li>
+    <a href="labs.php" >
+      <i class="glyphicon glyphicon-equalizer"></i>
+      <span>Laboratorios</span>
+    </a>
+  </li>
   
 <!--  <li>
     <a href="company.php" >
@@ -43,6 +49,12 @@
     <a href="product.php" class="submenu-toggle">
       <i class="glyphicon glyphicon-th-large"></i>
       <span>Productos</span>
+    </a>
+  </li>
+  <li>
+    <a href="inventory.php" class="submenu-toggle">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Inventarios</span>
     </a>
   </li>
 <!--  
